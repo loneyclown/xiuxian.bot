@@ -408,8 +408,7 @@ export class Information extends APlugin {
               picture
                 .render('Equipmentcomponent', {
                   name: UID,
-                  // cssName: 'new-equiment',
-                  cssName: 'new-information',
+                  cssName: ['new-information', 'new-equiment'],
                   props: {
                     data: res
                   }

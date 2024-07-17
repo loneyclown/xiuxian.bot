@@ -36,12 +36,17 @@ export class Bag extends APlugin {
       e.user_avatar,
       GameApi.Goods.mapType[type] ?? GameApi.Goods.mapType['道具']
     )
-    const img = await picture.render('BagComponent', {
-      cssName: 'new-bag',
-      props: { data },
-      name: UID
+    const arr = data.bag.map(item => `[${item.name}]: 数量${item.acount}。`)
+
+    e.reply([`${arr.join('\n')}`], {
+      quote: e.msg_id
     })
-    if (typeof img != 'boolean') e.reply(img)
+    // const img = await picture.render('BagComponent', {
+    //   cssName: ['new-information', 'new-bag'],
+    //   props: { data },
+    //   name: UID
+    // })
+    // if (typeof img != 'boolean') e.reply(img)
     return
   }
 
