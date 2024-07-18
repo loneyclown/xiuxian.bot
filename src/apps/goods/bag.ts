@@ -1,4 +1,4 @@
-import { APlugin, type AEvent } from 'alemonjs'
+import { APlugin, Controllers, type AEvent } from 'alemonjs'
 import { isThereAUserPresent } from 'xiuxian-api'
 import { picture } from 'xiuxian-component'
 
@@ -36,11 +36,85 @@ export class Bag extends APlugin {
       e.user_avatar,
       GameApi.Goods.mapType[type] ?? GameApi.Goods.mapType['道具']
     )
-    const arr = data.bag.map(item => `[${item.name}]: 数量${item.acount}。`)
+    const arr = data.bag.map(
+      item =>
+        `【${item.name}】: 数量${item.acount}。 ${item.doc ? item.doc : ''}`
+    )
 
-    e.reply([`${arr.join('\n')}`], {
-      quote: e.msg_id
-    })
+    if (e.platform == 'ntqq') {
+      ;(Controllers(e).Message as any).markdown(
+        {
+          custom_template_id: '102052769_1716276531',
+          params: [
+            {
+              key: 'story_title',
+              values: ['储物袋']
+            },
+            {
+              key: 'paragraph_content',
+              values: [`***\r\r${arr.join('\r\r')}`]
+            },
+            {
+              key: 'paragraph_option1',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option2',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option3',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option4',
+              values: ['不要点，没有用']
+            }
+          ]
+        },
+        [
+          { label: '武器', value: '/储物袋武器', enter: true },
+          { label: '护具', value: '/储物袋护具', enter: true },
+          { label: '法宝', value: '/储物袋法宝', enter: true },
+          { label: '丹药', value: '/储物袋丹药', enter: true }
+        ],
+        [
+          { label: '功法', value: '/储物袋功法', enter: true },
+          { label: '道具', value: '/储物袋道具', enter: true },
+          { label: '材料', value: '/储物袋材料', enter: true },
+          { label: '装备', value: '/储物袋装备', enter: true }
+        ],
+        [
+          { label: '升级', value: '/储物袋升级', enter: true },
+          { label: '丢弃', value: '/储物袋丢弃' }
+        ]
+      )
+    }
+
+    // e.reply([`\n${arr.join('\n')}`], {
+    //   quote: e.msg_id
+    // })
+    // if (e.platform == 'ntqq') {
+    //   Controllers(e).Message.reply(
+    //     '',
+    //     [
+    //       { label: '武器', value: '/储物袋武器', enter: true },
+    //       { label: '护具', value: '/储物袋护具', enter: true },
+    //       { label: '法宝', value: '/储物袋法宝', enter: true },
+    //       { label: '丹药', value: '/储物袋丹药', enter: true }
+    //     ],
+    //     [
+    //       { label: '功法', value: '/储物袋功法', enter: true },
+    //       { label: '道具', value: '/储物袋道具', enter: true },
+    //       { label: '材料', value: '/储物袋材料', enter: true },
+    //       { label: '装备', value: '/储物袋装备', enter: true }
+    //     ],
+    //     [
+    //       { label: '升级', value: '/储物袋升级', enter: true },
+    //       { label: '丢弃', value: '/储物袋丢弃' },
+    //     ],
+    //   )
+    // }
     // const img = await picture.render('BagComponent', {
     //   cssName: ['new-information', 'new-bag'],
     //   props: { data },

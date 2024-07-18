@@ -272,13 +272,53 @@ export class Monster extends APlugin {
     GameApi.Burial.set(UID, CDID, GameApi.Cooling.CD_Kill)
     // 减少怪物
     await GameApi.Monster.reduce(UserData.point_type, Mname)
-    // 发送下下哦i
-    await e.reply(msgRight)
-    Controllers(e).Message.reply('', [
-      { label: '储物袋', value: '/储物袋' },
-      { label: '突破', value: '/突破' },
-      { label: '破境', value: '/破境' }
-    ])
+    // 发送下下哦
+
+    if (e.platform == 'ntqq') {
+      ;(Controllers(e).Message as any).markdown(
+        {
+          custom_template_id: '102052769_1716276531',
+          params: [
+            {
+              key: 'story_title',
+              values: ['战斗信息']
+            },
+            {
+              key: 'paragraph_content',
+              values: [`***\r\r${msgRight.map(replaceCharacters).join('')}`]
+            },
+            {
+              key: 'paragraph_option1',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option2',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option3',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option4',
+              values: ['不要点，没有用']
+            }
+          ]
+        },
+        [
+          { label: '储物袋', value: '/储物袋' },
+          { label: '突破', value: '/突破' },
+          { label: '破境', value: '/破境' }
+        ]
+      )
+    } else {
+      await e.reply(msgRight)
+      Controllers(e).Message.reply('', [
+        { label: '储物袋', value: '/储物袋' },
+        { label: '突破', value: '/突破' },
+        { label: '破境', value: '/破境' }
+      ])
+    }
     return
   }
 
@@ -327,9 +367,7 @@ export class Monster extends APlugin {
         }`
       )
     }
-    const m = Controllers(e).Message
-    e.reply(msg).then(() => {
-      // 分开发送。
+    if (e.platform == 'ntqq') {
       const arrs: MessageButtonType[][] = []
       let arr: MessageButtonType[] = []
       for (const item of sortedMonsters) {
@@ -342,8 +380,58 @@ export class Monster extends APlugin {
       if (arr.length >= 1) {
         arrs.push(arr)
       }
-      m.reply('', ...arrs)
-    })
+
+      ;(Controllers(e).Message as any).markdown(
+        {
+          custom_template_id: '102052769_1716276531',
+          params: [
+            {
+              key: 'story_title',
+              values: ['探索信息']
+            },
+            {
+              key: 'paragraph_content',
+              values: [`***\r\r${msg.map(replaceCharacters).join('')}`]
+            },
+            {
+              key: 'paragraph_option1',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option2',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option3',
+              values: ['不要点，没有用']
+            },
+            {
+              key: 'paragraph_option4',
+              values: ['不要点，没有用']
+            }
+          ]
+        },
+        ...arrs
+      )
+    } else {
+      const m = Controllers(e).Message
+      e.reply(msg).then(() => {
+        // 分开发送。
+        const arrs: MessageButtonType[][] = []
+        let arr: MessageButtonType[] = []
+        for (const item of sortedMonsters) {
+          arr.push({ label: item, value: `/击杀${item}` })
+          if (arr.length >= 3) {
+            arrs.push(arr)
+            arr = []
+          }
+        }
+        if (arr.length >= 1) {
+          arrs.push(arr)
+        }
+        m.reply('', ...arrs)
+      })
+    }
     return
   }
   /**
@@ -484,4 +572,8 @@ const treasureMessages = [
  */
 function randomTxt() {
   return treasureMessages[Math.floor(Math.random() * treasureMessages.length)]
+}
+
+function replaceCharacters(str) {
+  return str.replace(/\[/g, '【').replace(/\]/g, '】').replace(/\n/g, '\r\r')
 }

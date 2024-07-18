@@ -8,7 +8,7 @@ export const user_bag = sequelize.define<
     type: number // 物品类型
     name: string // 物品名
     acount: number // 数量
-    doc: number // 说明
+    doc: string // 说明
   }>
 >(
   'user_bag',
