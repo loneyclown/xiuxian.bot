@@ -1,6 +1,18 @@
 import React from 'react'
-import { nameMap } from '../core'
 import { hash } from 'alemonjs'
+
+const Item = ({ label, value, suf = '%' }) => {
+  if (!value) {
+    return null
+  }
+  return (
+    <div>
+      {label}: {value}
+      {suf}
+    </div>
+  )
+}
+
 export default function App({ data }) {
   const UID = isNaN(Number(data.UID)) ? hash(data.UID) : data.UID
   return (
@@ -23,44 +35,25 @@ export default function App({ data }) {
             格子: {data.length}/{data.bag_grade * 10}
           </div>
         </div>
-        <div className="nav-right">
-          <div className="user_top_img_bottom">
-            <img className="user_top_img" src={data.avatar} alt="User Avatar" />
-          </div>
-        </div>
       </nav>
       <main className="main">
         {data.bag.map((item, index) => (
           <div key={index} className="main-item">
             <div className="user_top_right_font0 font_control Horizontal_grid">
-              {item['good.name']}
+              {/* {item['good.name']} */}
+              {item['name']}
             </div>
-            <div className="user_top_right_font1 font_control lattice">
-              <div>攻击: {item['good.attack']}%</div>
-              <div>防御: {item['good.defense']}%</div>
-              <div>血量: {item['good.blood']}%</div>
-            </div>
-            <div className="user_top_right_font font_control lattice">
-              <div>天赋: {item['good.size']}%</div>
-              <div>暴击: {item['good.critical_hit']}%</div>
-              <div>暴伤: {item['good.critical_damage']}%</div>
-            </div>
-            <div className="user_top_right_font1 font_control lattice">
-              <div>敏捷: {item['good.speed']}</div>
-              <div>
-                {nameMap[item['good.addition']]}:{' '}
-                {item[`good.${item['good.addition']}`]}
-                {item['good.addition'] === 'boolere_covery' && <span> % </span>}
-              </div>
-              <div>五行: ???</div>
-            </div>
-            <div
-              className="user_top_right_font2 font_control lattice"
-              style={{ marginBottom: '5px' }}
-            >
-              <div>等级: {item['good.grade']}</div>
-              <div>数量: {item['acount']}</div>
-              <div>灵石: {item['good.price']}</div>
+            <div className="user_top_right_font1 main-item-content">
+              <Item label="攻击" value={item['good.attack']} />
+              <Item label="防御" value={item['good.defense']} />
+              <Item label="血量" value={item['good.blood']} />
+              <Item label="天赋" value={item['good.size']} />
+              <Item label="暴击" value={item['good.critical_hit']} />
+              <Item label="暴伤" value={item['good.critical_damage']} />
+              <Item label="敏捷" value={item['good.speed']} suf="" />
+              <Item label="等级" value={item['good.grade']} suf="" />
+              <Item label="数量" value={item['acount']} suf="" />
+              <Item label="灵石" value={item['good.price']} suf="" />
             </div>
           </div>
         ))}

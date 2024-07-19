@@ -22,11 +22,11 @@ mkdirSync(dir, {
 
 //
 export const sequelize = new Sequelize(
-  process.env?.ALEMONJS_MYSQL_DATABASE ?? 'xiuxian',
+  process.env?.ALEMONJS_MYSQL_DATABASE ?? 'xiuxian_bak',
   process.env?.ALEMONJS_MYSQL_USER ?? 'root',
-  process.env?.ALEMONJS_MYSQL_PASSWORD ?? '',
+  process.env?.ALEMONJS_MYSQL_PASSWORD ?? 'mysql_8P7dtZ',
   {
-    host: process.env?.ALEMONJS_MYSQL_HOST ?? 'localhost',
+    host: process.env?.ALEMONJS_MYSQL_HOST ?? '121.36.252.193',
     port: Number(process.env?.ALEMONJS_MYSQL_PROT ?? 3306),
     dialect: 'mysql',
     logging: sql => {
